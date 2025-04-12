@@ -16,6 +16,7 @@ namespace Calendario.Models.Data
         public DbSet<RespOperador> DataRespOperador { get; set; }
         public DbSet<Principal> DataPrincipal { get; set; }
         public DbSet<AmbienteA> DataAmbienteA { get; set; }
+        public DbSet<Ambiente> DataAmbiente { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,6 +46,13 @@ namespace Calendario.Models.Data
                 .WithMany()
                 .HasForeignKey(p => p.RespOperadorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AmbienteA>()
+                .HasOne(a => a.Ambiente)
+                .WithMany() // Si un ambiente se puede usar en muchos horarios (AmbienteA)
+                .HasForeignKey(a => a.AmbienteId)
+                .OnDelete(DeleteBehavior.Restrict); // Para evitar que se borren los horarios si se borra un ambiente
+
 
             modelBuilder.Entity<Principal>()
             .HasMany(p => p.AmbienteA)

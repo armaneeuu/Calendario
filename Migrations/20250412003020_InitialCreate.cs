@@ -13,6 +13,19 @@ namespace Calendario.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "t_ambiente",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    NomAmb = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_t_ambiente", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "t_especifico",
                 columns: table => new
                 {
@@ -110,14 +123,21 @@ namespace Calendario.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Fecha = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     HoraInicio = table.Column<TimeSpan>(type: "interval", nullable: false),
                     HoraFin = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    AmbienteId = table.Column<int>(type: "integer", nullable: false),
                     PrincipalId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_t_ambientea", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_t_ambientea_t_ambiente_AmbienteId",
+                        column: x => x.AmbienteId,
+                        principalTable: "t_ambiente",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_t_ambientea_t_principal_PrincipalId",
                         column: x => x.PrincipalId,
@@ -125,6 +145,11 @@ namespace Calendario.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_t_ambientea_AmbienteId",
+                table: "t_ambientea",
+                column: "AmbienteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_t_ambientea_PrincipalId",
@@ -157,6 +182,9 @@ namespace Calendario.Migrations
         {
             migrationBuilder.DropTable(
                 name: "t_ambientea");
+
+            migrationBuilder.DropTable(
+                name: "t_ambiente");
 
             migrationBuilder.DropTable(
                 name: "t_principal");

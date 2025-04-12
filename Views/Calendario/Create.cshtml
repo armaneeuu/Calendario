@@ -10,7 +10,7 @@
     <div class="col-md-8">
         <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+
             <div class="form-group">
                 <label asp-for="GlobalId" class="control-label">Global</label>
                 <select asp-for="GlobalId" class="form-control">
@@ -22,7 +22,7 @@
                 </select>
                 <span asp-validation-for="GlobalId" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <label asp-for="EspecificoId" class="control-label">Específico</label>
                 <select asp-for="EspecificoId" class="form-control">
@@ -34,7 +34,7 @@
                 </select>
                 <span asp-validation-for="EspecificoId" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <label asp-for="RespAcademicoId" class="control-label">Responsable Académico</label>
                 <select asp-for="RespAcademicoId" class="form-control">
@@ -46,7 +46,7 @@
                 </select>
                 <span asp-validation-for="RespAcademicoId" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <label asp-for="RespOperadorId" class="control-label">Responsable Operador</label>
                 <select asp-for="RespOperadorId" class="form-control">
@@ -58,10 +58,10 @@
                 </select>
                 <span asp-validation-for="RespOperadorId" class="text-danger"></span>
             </div>
-            
+
             <hr />
             <h4>Ambientes</h4>
-            
+
             <div id="ambientes-container">
                 <!-- Los ambientes se añadirán aquí -->
                 @if (Model?.AmbienteA != null && Model.AmbienteA.Count > 0)
@@ -73,21 +73,35 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">Fecha</label>
-                                        <input type="date" name="AmbienteA[@i].Fecha" class="form-control" value="@Model.AmbienteA[i].Fecha.ToString("yyyy-MM-dd")" />
+                                        <input type="date" name="AmbienteA[@i].Fecha" class="form-control"
+                                            value="@Model.AmbienteA[i].Fecha.ToString("yyyy-MM-dd")" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">Hora Inicio</label>
-                                        <input type="time" name="AmbienteA[@i].HoraInicio" class="form-control" value="@Model.AmbienteA[i].HoraInicio.ToString(@"hh\:mm")" />
+                                        <input type="time" name="AmbienteA[@i].HoraInicio" class="form-control"
+                                            value="@Model.AmbienteA[i].HoraInicio.ToString(@"hh\:mm")" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">Hora Fin</label>
-                                        <input type="time" name="AmbienteA[@i].HoraFin" class="form-control" value="@Model.AmbienteA[i].HoraFin.ToString(@"hh\:mm")" />
+                                        <input type="time" name="AmbienteA[@i].HoraFin" class="form-control"
+                                            value="@Model.AmbienteA[i].HoraFin.ToString(@"hh\:mm")" />
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label>Ambiente</label>
+                                    <select class="form-control" name="AmbienteA[@i].AmbienteId">
+                                        <option value="">-- Seleccione un ambiente --</option>
+                                        @foreach (var ambiente in ViewBag.Ambientes)
+                                        {
+                                            <option value="@ambiente.Id">@ambiente.NomAmb</option>
+                                        }
+                                    </select>
+                                </div>
+
                             </div>
                             <button type="button" class="btn btn-danger btn-sm remove-ambiente">Eliminar</button>
                             <hr />
@@ -95,9 +109,9 @@
                     }
                 }
             </div>
-            
+
             <button type="button" id="agregar-ambiente" class="btn btn-success mb-3">Agregar Ambiente</button>
-            
+
             <div class="form-group mt-3">
                 <input type="submit" value="Create" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-secondary">Back to List</a>
@@ -107,56 +121,69 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
     <script>
-        $(document).ready(function() {
+
+        const optionsHtml = `@Html.Raw(string.Join("", ((List<Calendario.Models.Ambiente>)ViewBag.Ambientes).Select(a => $"<option value='{a.Id}'>{a.NomAmb}</option>")))`;
+
+        $(document).ready(function () {
             // Contador para mantener un índice único para cada nuevo ambiente
             let ambienteCount = @(Model?.AmbienteA?.Count ?? 0);
-            
+
             // Función para agregar 3 nuevos ambientes cuando se hace clic en el botón
-            $("#agregar-ambiente").click(function() {
+            $("#agregar-ambiente").click(function () {
                 // Agregar 3 grupos de ambiente de una vez
                 for (let i = 0; i < 1; i++) {
                     addAmbiente();
                 }
             });
-            
+
             // Función para agregar un solo ambiente
             function addAmbiente() {
                 const ambienteHtml = `
-                    <div class="ambiente-grupo">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label">Fecha</label>
-                                    <input type="date" name="AmbienteA[${ambienteCount}].Fecha" class="form-control" required />
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label">Hora Inicio</label>
-                                    <input type="time" name="AmbienteA[${ambienteCount}].HoraInicio" class="form-control" required />
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label">Hora Fin</label>
-                                    <input type="time" name="AmbienteA[${ambienteCount}].HoraFin" class="form-control" required />
-                                </div>
-                            </div>
+                            <div class="ambiente-grupo">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Fecha</label>
+                                            <input type="date" name="AmbienteA[${ambienteCount}].Fecha" class="form-control" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Hora Inicio</label>
+                                            <input type="time" name="AmbienteA[${ambienteCount}].HoraInicio" class="form-control" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Hora Fin</label>
+                                            <input type="time" name="AmbienteA[${ambienteCount}].HoraFin" class="form-control" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Ambiente</label>
+                            <select name="AmbienteA[${ambienteCount}].AmbienteId" class="form-control" required>
+                                ${optionsHtml}
+                            </select>
                         </div>
-                        <button type="button" class="btn btn-danger btn-sm remove-ambiente">Eliminar</button>
-                        <hr />
                     </div>
-                `;
-                
+                                </div>
+                                <button type="button" class="btn btn-danger btn-sm remove-ambiente">Eliminar</button>
+                                <hr />
+                            </div>
+                        `;
+
                 $("#ambientes-container").append(ambienteHtml);
                 ambienteCount++;
             }
-            
+
             // Manejador para eliminar un ambiente (delegado para funcionar con elementos dinámicos)
-            $(document).on("click", ".remove-ambiente", function() {
+            $(document).on("click", ".remove-ambiente", function () {
                 $(this).closest(".ambiente-grupo").remove();
             });
         });

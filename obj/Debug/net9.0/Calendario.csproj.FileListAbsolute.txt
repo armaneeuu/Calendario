@@ -383,3 +383,4 @@ C:\Users\CENSI USMP\Desktop\Calendario\obj\Debug\net9.0\compressed\3p1sbump8o-vm
 C:\Users\CENSI USMP\Desktop\Calendario\obj\Debug\net9.0\compressed\pnptpa4he2-ita7w0oaef.gz
 C:\Users\CENSI USMP\Desktop\Calendario\obj\Debug\net9.0\compressed\w5dfqyn0yi-8xznomizu9.gz
 C:\Users\CENSI USMP\Desktop\Calendario\obj\Debug\net9.0\compressed\yo4kuty2ig-xnrazl4vv0.gz
+C:\Users\CENSI USMP\Desktop\Calendario\obj\Debug\net9.0\Calendario.sourcelink.json

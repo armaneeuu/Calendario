@@ -1,52 +1,53 @@
-@model List<Calendario.Models.Principal>
+@model IEnumerable<Calendario.Models.Principal>
 
 @{
-    ViewData["Title"] = "Listado de registros";
+    ViewData["Title"] = "Calendario";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<a asp-action="Create" class="btn btn-primary mb-3">Crear nuevo registro</a>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Nuevo</a>
+</p>
 
-@foreach (var principal in Model)
-{
-    <div class="card mb-4">
-        <div class="card-header">
-            <strong>Registro #@principal.Id</strong>
-        </div>
-        <div class="card-body">
-            <p><strong>Global:</strong> @principal.Global?.NomGlo</p>
-            <p><strong>Específico:</strong> @principal.Especifico?.NomEsp</p>
-            <p><strong>Responsable Académico:</strong> @principal.RespAcademico?.NomAcad</p>
-            <p><strong>Responsable Operador:</strong> @principal.RespOperador?.NomOpe</p>
-
-            @if (principal.AmbienteA != null && principal.AmbienteA.Any())
-            {
-                <h5>Ambientes:</h5>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Hora Inicio</th>
-                            <th>Hora Fin</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var ambiente in principal.AmbienteA)
-                        {
-                            <tr>
-                                <td>@ambiente.Fecha.ToString("yyyy-MM-dd")</td>
-                                <td>@ambiente.HoraInicio.ToString(@"hh\:mm")</td>
-                                <td>@ambiente.HoraFin.ToString(@"hh\:mm")</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <p class="text-muted">No hay ambientes registrados.</p>
-            }
-        </div>
-    </div>
-}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Global</th>
+            <th>Específico</th>
+            <th>Resp. Académico</th>
+            <th>Resp. Operador</th>
+            <th>Ambientes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Global?.NomGlo</td>
+                <td>@item.Especifico?.NomEsp</td>
+                <td>@item.RespAcademico?.NomAcad</td>
+                <td>@item.RespOperador?.NomOpe</td>
+                <td>
+                    @if (item.AmbienteA != null && item.AmbienteA.Any())
+                    {
+                        <ul class="list-unstyled">
+                            @foreach (var amb in item.AmbienteA)
+                            {
+                                <li>
+                                    <strong>@amb.Ambiente?.NomAmb</strong> - 
+                                    @amb.Fecha.ToShortDateString(), 
+                                    @amb.HoraInicio.ToString(@"hh\:mm") - @amb.HoraFin.ToString(@"hh\:mm")
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin ambientes asignados</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Calendario.Migrations
 {
     [DbContext(typeof(CalendarioContext))]
-    [Migration("20250408224543_InitialCreate")]
+    [Migration("20250412003020_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,6 +25,22 @@ namespace Calendario.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Calendario.Models.Ambiente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("NomAmb")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("t_ambiente");
+                });
+
             modelBuilder.Entity("Calendario.Models.AmbienteA", b =>
                 {
                     b.Property<int>("Id")
@@ -33,8 +49,11 @@ namespace Calendario.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AmbienteId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<TimeSpan>("HoraFin")
                         .HasColumnType("interval");
@@ -46,6 +65,8 @@ namespace Calendario.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AmbienteId");
 
                     b.HasIndex("PrincipalId");
 
@@ -151,11 +172,19 @@ namespace Calendario.Migrations
 
             modelBuilder.Entity("Calendario.Models.AmbienteA", b =>
                 {
+                    b.HasOne("Calendario.Models.Ambiente", "Ambiente")
+                        .WithMany()
+                        .HasForeignKey("AmbienteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Calendario.Models.Principal", "Principal")
                         .WithMany("AmbienteA")
                         .HasForeignKey("PrincipalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Ambiente");
 
                     b.Navigation("Principal");
                 });
