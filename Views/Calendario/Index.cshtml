@@ -1,0 +1,52 @@
+@model List<Calendario.Models.Principal>
+
+@{
+    ViewData["Title"] = "Listado de registros";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Crear nuevo registro</a>
+
+@foreach (var principal in Model)
+{
+    <div class="card mb-4">
+        <div class="card-header">
+            <strong>Registro #@principal.Id</strong>
+        </div>
+        <div class="card-body">
+            <p><strong>Global:</strong> @principal.Global?.NomGlo</p>
+            <p><strong>Específico:</strong> @principal.Especifico?.NomEsp</p>
+            <p><strong>Responsable Académico:</strong> @principal.RespAcademico?.NomAcad</p>
+            <p><strong>Responsable Operador:</strong> @principal.RespOperador?.NomOpe</p>
+
+            @if (principal.AmbienteA != null && principal.AmbienteA.Any())
+            {
+                <h5>Ambientes:</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora Inicio</th>
+                            <th>Hora Fin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ambiente in principal.AmbienteA)
+                        {
+                            <tr>
+                                <td>@ambiente.Fecha.ToString("yyyy-MM-dd")</td>
+                                <td>@ambiente.HoraInicio.ToString(@"hh\:mm")</td>
+                                <td>@ambiente.HoraFin.ToString(@"hh\:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">No hay ambientes registrados.</p>
+            }
+        </div>
+    </div>
+}

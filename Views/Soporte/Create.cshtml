@@ -1,0 +1,22 @@
+@model Calendario.Models.Global
+
+@{
+    ViewData["Title"] = "Crear Nuevo Registro";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="NomGlo" class="control-label">Nombre Global</label>
+        <input asp-for="NomGlo" class="form-control" />
+        <span asp-validation-for="NomGlo" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
