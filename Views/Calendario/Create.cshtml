@@ -70,38 +70,87 @@
                     {
                         <div class="ambiente-grupo">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Fecha</label>
                                         <input type="date" name="AmbienteA[@i].Fecha" class="form-control"
-                                            value="@Model.AmbienteA[i].Fecha.ToString("yyyy-MM-dd")" />
+                                              value="@Model.AmbienteA[i].Fecha.ToString("yyyy-MM-dd")" />
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Hora Inicio</label>
-                                        <input type="time" name="AmbienteA[@i].HoraInicio" class="form-control"
-                                            value="@Model.AmbienteA[i].HoraInicio.ToString(@"hh\:mm")" />
+                                        <div class="d-flex">
+                                            @{
+                                                int horaInicio = Model.AmbienteA[i].HoraInicio.Hours;
+                                                int minInicio = Model.AmbienteA[i].HoraInicio.Minutes;
+                                            }
+                                            <select class="form-control hora-select" style="width:50%" 
+                                                    data-index="@i" data-tipo="inicio">
+                                                @for(int h = 0; h < 24; h++) {
+                                                    <option value="@h.ToString("D2")" @(h == horaInicio ? "selected" : "")>
+                                                        @h.ToString("D2")
+                                                    </option>
+                                                }
+                                            </select>
+                                            <span class="align-self-center mx-1">:</span>
+                                            <select class="form-control minuto-select" style="width:50%" 
+                                                    data-index="@i" data-tipo="inicio">
+                                                <option value="00" @(minInicio == 0 ? "selected" : "")>00</option>
+                                                <option value="15" @(minInicio == 15 ? "selected" : "")>15</option>
+                                                <option value="30" @(minInicio == 30 ? "selected" : "")>30</option>
+                                                <option value="45" @(minInicio == 45 ? "selected" : "")>45</option>
+                                            </select>
+                                            <input type="hidden" name="AmbienteA[@i].HoraInicio" 
+                                                   id="horaInicio@(i)" 
+                                                   value="@Model.AmbienteA[i].HoraInicio.ToString(@"hh\:mm")" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Hora Fin</label>
-                                        <input type="time" name="AmbienteA[@i].HoraFin" class="form-control"
-                                            value="@Model.AmbienteA[i].HoraFin.ToString(@"hh\:mm")" />
+                                        <div class="d-flex">
+                                            @{
+                                                int horaFin = Model.AmbienteA[i].HoraFin.Hours;
+                                                int minFin = Model.AmbienteA[i].HoraFin.Minutes;
+                                            }
+                                            <select class="form-control hora-select" style="width:50%" 
+                                                    data-index="@i" data-tipo="fin">
+                                                @for(int h = 0; h < 24; h++) {
+                                                    <option value="@h.ToString("D2")" @(h == horaFin ? "selected" : "")>
+                                                        @h.ToString("D2")
+                                                    </option>
+                                                }
+                                            </select>
+                                            <span class="align-self-center mx-1">:</span>
+                                            <select class="form-control minuto-select" style="width:50%" 
+                                                    data-index="@i" data-tipo="fin">
+                                                <option value="00" @(minFin == 0 ? "selected" : "")>00</option>
+                                                <option value="15" @(minFin == 15 ? "selected" : "")>15</option>
+                                                <option value="30" @(minFin == 30 ? "selected" : "")>30</option>
+                                                <option value="45" @(minFin == 45 ? "selected" : "")>45</option>
+                                            </select>
+                                            <input type="hidden" name="AmbienteA[@i].HoraFin" 
+                                                   id="horaFin@(i)" 
+                                                   value="@Model.AmbienteA[i].HoraFin.ToString(@"hh\:mm")" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Ambiente</label>
-                                    <select class="form-control" name="AmbienteA[@i].AmbienteId">
-                                        <option value="">-- Seleccione un ambiente --</option>
-                                        @foreach (var ambiente in ViewBag.Ambientes)
-                                        {
-                                            <option value="@ambiente.Id">@ambiente.NomAmb</option>
-                                        }
-                                    </select>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Ambiente</label>
+                                        <select class="form-control" name="AmbienteA[@i].AmbienteId">
+                                            <option value="">-- Seleccione un ambiente --</option>
+                                            @foreach (var ambiente in ViewBag.Ambientes)
+                                            {
+                                                <option value="@ambiente.Id" @(Model.AmbienteA[i].AmbienteId == ambiente.Id ? "selected" : "")>
+                                                    @ambiente.NomAmb
+                                                </option>
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
-
                             </div>
                             <button type="button" class="btn btn-danger btn-sm remove-ambiente">Eliminar</button>
                             <hr />
@@ -126,63 +175,132 @@
     }
 
     <script>
-
         const optionsHtml = `@Html.Raw(string.Join("", ((List<Calendario.Models.Ambiente>)ViewBag.Ambientes).Select(a => $"<option value='{a.Id}'>{a.NomAmb}</option>")))`;
 
         $(document).ready(function () {
             // Contador para mantener un índice único para cada nuevo ambiente
             let ambienteCount = @(Model?.AmbienteA?.Count ?? 0);
 
-            // Función para agregar 3 nuevos ambientes cuando se hace clic en el botón
-            $("#agregar-ambiente").click(function () {
-                // Agregar 3 grupos de ambiente de una vez
-                for (let i = 0; i < 1; i++) {
-                    addAmbiente();
+            // Función para actualizar los valores ocultos de tiempo
+            function actualizarTiempoOculto(index, tipo) {
+                const hora = $(`select.hora-select[data-index="${index}"][data-tipo="${tipo}"]`).val();
+                const minuto = $(`select.minuto-select[data-index="${index}"][data-tipo="${tipo}"]`).val();
+                const tiempoCompleto = `${hora}:${minuto}`;
+                
+                if (tipo === 'inicio') {
+                    $(`#horaInicio${index}`).val(tiempoCompleto);
+                } else {
+                    $(`#horaFin${index}`).val(tiempoCompleto);
                 }
+            }
+
+            // Manejar cambios en los selectores de hora y minutos
+            $(document).on('change', '.hora-select, .minuto-select', function() {
+                const index = $(this).data('index');
+                const tipo = $(this).data('tipo');
+                actualizarTiempoOculto(index, tipo);
+            });
+
+            // Inicializar los campos ocultos para registros existentes
+            $('.hora-select, .minuto-select').each(function() {
+                const index = $(this).data('index');
+                const tipo = $(this).data('tipo');
+                actualizarTiempoOculto(index, tipo);
+            });
+
+            // Función para agregar nuevos ambientes
+            $("#agregar-ambiente").click(function () {
+                addAmbiente();
             });
 
             // Función para agregar un solo ambiente
             function addAmbiente() {
                 const ambienteHtml = `
-                            <div class="ambiente-grupo">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label class="control-label">Fecha</label>
-                                            <input type="date" name="AmbienteA[${ambienteCount}].Fecha" class="form-control" required />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label class="control-label">Hora Inicio</label>
-                                            <input type="time" name="AmbienteA[${ambienteCount}].HoraInicio" class="form-control" required />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label class="control-label">Hora Fin</label>
-                                            <input type="time" name="AmbienteA[${ambienteCount}].HoraFin" class="form-control" required />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label class="control-label">Ambiente</label>
-                            <select name="AmbienteA[${ambienteCount}].AmbienteId" class="form-control" required>
-                                ${optionsHtml}
-                            </select>
-                        </div>
-                    </div>
+                    <div class="ambiente-grupo">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Fecha</label>
+                                    <input type="date" name="AmbienteA[${ambienteCount}].Fecha" class="form-control" required />
                                 </div>
-                                <button type="button" class="btn btn-danger btn-sm remove-ambiente">Eliminar</button>
-                                <hr />
                             </div>
-                        `;
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Hora Inicio</label>
+                                    <div class="d-flex">
+                                        <select class="form-control hora-select" style="width:50%" 
+                                                data-index="${ambienteCount}" data-tipo="inicio">
+                                            ${generarOpcionesHora()}
+                                        </select>
+                                        <span class="align-self-center mx-1">:</span>
+                                        <select class="form-control minuto-select" style="width:50%" 
+                                                data-index="${ambienteCount}" data-tipo="inicio">
+                                            <option value="00">00</option>
+                                            <option value="15">15</option>
+                                            <option value="30">30</option>
+                                            <option value="45">45</option>
+                                        </select>
+                                        <input type="hidden" name="AmbienteA[${ambienteCount}].HoraInicio" 
+                                               id="horaInicio${ambienteCount}" value="00:00" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Hora Fin</label>
+                                    <div class="d-flex">
+                                        <select class="form-control hora-select" style="width:50%" 
+                                                data-index="${ambienteCount}" data-tipo="fin">
+                                            ${generarOpcionesHora()}
+                                        </select>
+                                        <span class="align-self-center mx-1">:</span>
+                                        <select class="form-control minuto-select" style="width:50%" 
+                                                data-index="${ambienteCount}" data-tipo="fin">
+                                            <option value="00">00</option>
+                                            <option value="15">15</option>
+                                            <option value="30">30</option>
+                                            <option value="45">45</option>
+                                        </select>
+                                        <input type="hidden" name="AmbienteA[${ambienteCount}].HoraFin" 
+                                               id="horaFin${ambienteCount}" value="00:00" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Ambiente</label>
+                                    <select name="AmbienteA[${ambienteCount}].AmbienteId" class="form-control" required>
+                                        <option value="">-- Seleccione un ambiente --</option>
+                                        ${optionsHtml}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm remove-ambiente">Eliminar</button>
+                        <hr />
+                    </div>
+                `;
 
                 $("#ambientes-container").append(ambienteHtml);
+                
+                // Inicializar los campos ocultos para el nuevo ambiente
+                actualizarTiempoOculto(ambienteCount, 'inicio');
+                actualizarTiempoOculto(ambienteCount, 'fin');
+                
                 ambienteCount++;
             }
 
-            // Manejador para eliminar un ambiente (delegado para funcionar con elementos dinámicos)
+            // Función para generar opciones de horas (0-23)
+            function generarOpcionesHora() {
+                let options = '';
+                for(let h = 0; h < 24; h++) {
+                    const formattedHour = h.toString().padStart(2, '0');
+                    options += `<option value="${formattedHour}">${formattedHour}</option>`;
+                }
+                return options;
+            }
+
+            // Manejador para eliminar un ambiente
             $(document).on("click", ".remove-ambiente", function () {
                 $(this).closest(".ambiente-grupo").remove();
             });
