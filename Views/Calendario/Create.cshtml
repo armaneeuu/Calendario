@@ -88,18 +88,22 @@
                                             <select class="form-control hora-select" style="width:50%" 
                                                     data-index="@i" data-tipo="inicio">
                                                 @for(int h = 0; h < 24; h++) {
-                                                    <option value="@h.ToString("D2")" @(h == horaInicio ? "selected" : "")>
-                                                        @h.ToString("D2")
-                                                    </option>
-                                                }
+    var selected = (h == horaInicio) ? "selected" : "";
+    <option value="@h.ToString("D2")" selected="@selected">@h.ToString("D2")</option>
+}
+
                                             </select>
                                             <span class="align-self-center mx-1">:</span>
                                             <select class="form-control minuto-select" style="width:50%" 
                                                     data-index="@i" data-tipo="inicio">
-                                                <option value="00" @(minInicio == 0 ? "selected" : "")>00</option>
-                                                <option value="15" @(minInicio == 15 ? "selected" : "")>15</option>
-                                                <option value="30" @(minInicio == 30 ? "selected" : "")>30</option>
-                                                <option value="45" @(minInicio == 45 ? "selected" : "")>45</option>
+                                                @{
+    var minutos = new[] { 0, 15, 30, 45 };
+}
+@foreach (var min in minutos) {
+    var selected = (min == minInicio) ? "selected" : "";
+    <option value="@min.ToString("D2")" selected="@selected">@min.ToString("D2")</option>
+}
+
                                             </select>
                                             <input type="hidden" name="AmbienteA[@i].HoraInicio" 
                                                    id="horaInicio@(i)" 
@@ -118,18 +122,23 @@
                                             <select class="form-control hora-select" style="width:50%" 
                                                     data-index="@i" data-tipo="fin">
                                                 @for(int h = 0; h < 24; h++) {
-                                                    <option value="@h.ToString("D2")" @(h == horaFin ? "selected" : "")>
-                                                        @h.ToString("D2")
-                                                    </option>
-                                                }
+    var selected = (h == horaFin) ? "selected" : "";
+    <option value="@h.ToString("D2")" selected="@selected">@h.ToString("D2")</option>
+}
+
                                             </select>
                                             <span class="align-self-center mx-1">:</span>
                                             <select class="form-control minuto-select" style="width:50%" 
                                                     data-index="@i" data-tipo="fin">
-                                                <option value="00" @(minFin == 0 ? "selected" : "")>00</option>
-                                                <option value="15" @(minFin == 15 ? "selected" : "")>15</option>
-                                                <option value="30" @(minFin == 30 ? "selected" : "")>30</option>
-                                                <option value="45" @(minFin == 45 ? "selected" : "")>45</option>
+                                                @{
+    var minFinList = new[] { 0, 15, 30, 45 };
+}
+@foreach (var min in minFinList)
+{
+    var selected = (min == minFin) ? "selected" : "";
+    <option value="@min.ToString("D2")" selected="@selected">@min.ToString("D2")</option>
+}
+
                                             </select>
                                             <input type="hidden" name="AmbienteA[@i].HoraFin" 
                                                    id="horaFin@(i)" 
@@ -143,11 +152,11 @@
                                         <select class="form-control" name="AmbienteA[@i].AmbienteId">
                                             <option value="">-- Seleccione un ambiente --</option>
                                             @foreach (var ambiente in ViewBag.Ambientes)
-                                            {
-                                                <option value="@ambiente.Id" @(Model.AmbienteA[i].AmbienteId == ambiente.Id ? "selected" : "")>
-                                                    @ambiente.NomAmb
-                                                </option>
-                                            }
+{
+    var selected = (Model.AmbienteA[i].AmbienteId == ambiente.Id) ? "selected" : "";
+    <option value="@ambiente.Id" selected="@selected">@ambiente.NomAmb</option>
+}
+
                                         </select>
                                     </div>
                                 </div>

@@ -93,6 +93,38 @@ namespace Calendario.Controllers
                             .Where(a => a.AmbienteId > 0)
                             .ToList();
 
+                        // Validación de conflictos de horario
+                        if (principal.AmbienteA != null && principal.AmbienteA.Any())
+                        {
+                            foreach (var nuevoAmbiente in principal.AmbienteA)
+                            {
+                                var fecha = nuevoAmbiente.Fecha.Date;
+
+                                var conflictos = await _context.DataAmbienteA
+                                    .Where(a => a.AmbienteId == nuevoAmbiente.AmbienteId && a.Fecha.Date == fecha)
+                                    .ToListAsync();
+
+                                foreach (var existente in conflictos)
+                                {
+                                    if (nuevoAmbiente.HoraInicio < existente.HoraFin && nuevoAmbiente.HoraFin > existente.HoraInicio)
+                                    {
+                                        var nombreAmbiente = await _context.DataAmbiente
+                                            .Where(a => a.Id == nuevoAmbiente.AmbienteId)
+                                            .Select(a => a.NomAmb)
+                                            .FirstOrDefaultAsync();
+
+                                        ModelState.AddModelError("", $"El ambiente '{nombreAmbiente}' ya está reservado el {fecha:dd/MM/yyyy} de {existente.HoraInicio:hh\\:mm} a {existente.HoraFin:hh\\:mm}.");
+                                    }
+                                }
+                            }
+                        }
+
+                        // Si hay errores, no continuamos
+                        if (!ModelState.IsValid)
+                        {
+                            throw new Exception("Conflictos de horarios detectados.");
+                        }
+
                         // Preparar los datos de fecha/hora
                         foreach (var ambiente in principal.AmbienteA)
                         {
