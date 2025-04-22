@@ -33,6 +33,8 @@ namespace Calendario.Models
 
         [ForeignKey("PrincipalId")]
         public Principal? Principal { get; set; }
+
+        public string? Codigo {get; set;}
     }
 
 }

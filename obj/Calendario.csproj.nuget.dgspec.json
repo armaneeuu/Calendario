@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\Calendario.csproj": {}
+    "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\Calendario\\Calendario.csproj": {}
   },
   "projects": {
-    "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\Calendario.csproj": {
+    "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\Calendario\\Calendario.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\Calendario.csproj",
+        "projectUniqueName": "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\Calendario\\Calendario.csproj",
         "projectName": "Calendario",
-        "projectPath": "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\Calendario.csproj",
+        "projectPath": "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\Calendario\\Calendario.csproj",
         "packagesPath": "C:\\Users\\CENSI USMP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\obj\\",
+        "outputPath": "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\Calendario\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -127,7 +127,8 @@ namespace Calendario.Migrations
                     HoraInicio = table.Column<TimeSpan>(type: "interval", nullable: false),
                     HoraFin = table.Column<TimeSpan>(type: "interval", nullable: false),
                     AmbienteId = table.Column<int>(type: "integer", nullable: false),
-                    PrincipalId = table.Column<int>(type: "integer", nullable: false)
+                    PrincipalId = table.Column<int>(type: "integer", nullable: false),
+                    Codigo = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

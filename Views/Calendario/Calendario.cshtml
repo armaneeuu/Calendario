@@ -63,6 +63,7 @@
                     // Mostrar detalles del evento en el modal
                     $('#eventModalLabel').text(info.event.title);
                     $('#eventDetails').html(`
+                        <p><strong>Código:</strong> ${info.event.extendedProps.codigo}</p>
                         <p><strong>Fecha:</strong> ${moment(info.event.start).format('DD/MM/YYYY')}</p>
                         <p><strong>Horario:</strong> ${moment(info.event.start).format('HH:mm')} - ${moment(info.event.end).format('HH:mm')}</p>
                         <p><strong>Detalles:</strong></p>
@@ -72,7 +73,7 @@
                     // Mostrar el modal
                     var eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
                     eventModal.show();
-                }
+                },
             });
             
             calendar.render();

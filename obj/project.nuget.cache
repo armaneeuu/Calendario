@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VB9B7SDIOaA=",
+  "dgSpecHash": "HuaFVxnbW04=",
   "success": true,
-  "projectFilePath": "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\Calendario.csproj",
+  "projectFilePath": "C:\\Users\\CENSI USMP\\Desktop\\Calendario\\Calendario\\Calendario.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\CENSI USMP\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\CENSI USMP\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

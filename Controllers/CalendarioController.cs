@@ -65,6 +65,8 @@ namespace Calendario.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Principal principal)
         {
+            Console.WriteLine($"Cantidad de bloques de AmbienteA: {principal.AmbienteA?.Count}");
+
             // Remover propiedades de navegación del modelo para evitar problemas de validación
             ModelState.Remove("Global");
             ModelState.Remove("Especifico");
@@ -143,6 +145,19 @@ namespace Calendario.Controllers
 
                     // Añadir y guardar el registro principal con sus ambientes
                     _context.DataPrincipal.Add(principal);
+
+                    // Preparar los datos de fecha/hora
+                    foreach (var ambiente in principal.AmbienteA)
+                    {
+                        var horaInicio = ambiente.HoraInicio;
+                        var horaFin = ambiente.HoraFin;
+                        var fecha = ambiente.Fecha;
+
+                        ambiente.Codigo = $"{ambiente.AmbienteId:D2}{horaInicio.Hours:D2}{horaInicio.Minutes:D2}{horaFin.Hours:D2}{horaFin.Minutes:D2}{fecha.Day:D2}{fecha.Month:D2}{fecha.Year % 100:D2}";
+                    }
+
+
+
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction(nameof(Index));
@@ -212,7 +227,8 @@ namespace Calendario.Controllers
                         events.Add(new
                         {
                             id = ambiente.Id,
-                            title = $"{principal.Global?.NomGlo} - {ambiente.Ambiente?.NomAmb}",
+                            title = $"{principal.Global?.NomGlo} - {ambiente.Ambiente?.NomAmb} - {ambiente.Codigo}",
+                            codigo = ambiente.Codigo,
                             start = startDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                             end = endDate.ToString("yyyy-MM-ddTHH:mm:ss"),
                             description = $"Específico: {principal.Especifico?.NomEsp}\nResponsable Académico: {principal.RespAcademico?.NomAcad}\nResponsable Operador: {principal.RespOperador?.NomOpe}",

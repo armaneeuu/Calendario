@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Calendario.Migrations
 {
     [DbContext(typeof(CalendarioContext))]
-    [Migration("20250412003020_InitialCreate")]
+    [Migration("20250421230451_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -51,6 +51,9 @@ namespace Calendario.Migrations
 
                     b.Property<int>("AmbienteId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Codigo")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("timestamp without time zone");

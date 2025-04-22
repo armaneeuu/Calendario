@@ -49,6 +49,9 @@ namespace Calendario.Migrations
                     b.Property<int>("AmbienteId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Codigo")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("timestamp without time zone");
 

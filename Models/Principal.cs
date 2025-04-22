@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using NuGet.Protocol.Plugins;
 
 namespace Calendario.Models
 {
@@ -38,5 +39,7 @@ namespace Calendario.Models
         public RespOperador RespOperador { get; set; }
 
         public List<AmbienteA>? AmbienteA { get; set; }
+
+        
     }
 }
